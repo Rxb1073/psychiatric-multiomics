@@ -1,0 +1,9 @@
+module load bear-apps/2023a/live
+module load R/4.4.1-gfbf-2023a
+module load R-bundle-Bioconductor/3.19-foss-2023a-R-4.4.1
+module load QIIME2/2024.2
+
+NOTE: package versions differ between arms. A user library preceded the
+Bioconductor module on the library path for some analyses, so some packages
+resolve to Bioconductor 3.20 rather than the 3.19 module. Departures between
+arms are documented in Supplementary Methods S3 of the dissertation.
