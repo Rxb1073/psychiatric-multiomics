@@ -143,3 +143,21 @@ in interactive sessions that were not saved. Their input values are in
 `CROSS_ARM_figures/FigX_source_data.csv` and the CAMERA output tables
 respectively, so the figures are reproducible from saved data, but the plotting
 code is not in this repository.
+
+---
+
+## Microbiome · beta diversity
+
+Recomputed after the first submission so that all three arms report the same
+statistics from the same function.
+
+| Claim | Value | Script | Output |
+|---|---|---|---|
+| Schizophrenia, five metrics | R² 0.047–0.078, all P = 0.001 | `01_microbiome/scz_beta_diversity_adonis2.R` | `Microbiome_SCZ/tables/SCZ_beta_diversity_adonis2.csv` |
+| Depression, four metrics | R² 0.007–0.011, P = 0.005–0.099 | `01_microbiome/mdd_beta_diversity_adonis2.R` | `Microbiome_MDD/tables/MDD_beta_diversity_adonis2.csv` |
+| PERMDISP, both arms | reported alongside each PERMANOVA | same scripts | same files |
+
+Depression models include study as a covariate and report the marginal effect of
+diagnosis, so its R² is not directly comparable with schizophrenia's single-cohort
+value. Autism and depression Aitchison and Bray–Curtis values come from the
+original `stage4_diversity.R` and `diversity_mdd.R`.
