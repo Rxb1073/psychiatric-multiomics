@@ -161,3 +161,5 @@ Depression models include study as a covariate and report the marginal effect of
 diagnosis, so its R² is not directly comparable with schizophrenia's single-cohort
 value. Autism and depression Aitchison and Bray–Curtis values come from the
 original `stage4_diversity.R` and `diversity_mdd.R`.
+
+| Autism composition tested separately | Astro β = 0.043, P = 0.008; Neuro β = −0.052, P = 0.101 | `02_transcriptomics/asd/` (post-hoc, 45 donors) | `Transcriptomics_ASD/tables/nocomposition/ASD_composition_tested_separately.csv` |
