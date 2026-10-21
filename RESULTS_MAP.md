@@ -118,7 +118,7 @@ them consistently.
 | Claim | Value | Script | Output |
 |---|---|---|---|
 | Concordant genera | ASD 16 taxa (12 named), SCZ 26, MDD 4 | `stage5_diffabund.R`, `ancombc2_scz.R`, `ancombc_mdd_conda.R` | `stage5_concordant_core.csv`, `robust_genera_both_methods_v2.tsv`, `robust_genera_both_methods.tsv` |
-| SCZ–MDD shared genera | 3 of a pool of 116, P = 0.035 | `cross_arm_microbiome_test.R` | `12_cross_arm_microbiome/cross_arm_overlap.csv` |
+| SCZ–MDD shared genera | 3 of a pool of 116, P = 0.035, all three same direction | `cross_arm_microbiome_test.R` | `12_cross_arm_microbiome/cross_arm_overlap.csv` |
 | SCFA enrichment, five pairwise-shared | 3 of 5 against 10 of 166, 9.96-fold, P = 0.0015 | same | `12_cross_arm_microbiome/scfa_enrichment.csv` |
 | Tested genus universe | 166 | same | `12_cross_arm_microbiome/tested_genus_universe.csv` |
 | *Turicibacter* | +0.307 (ASD, MaAsLin2 q = 1.6 × 10⁻³); −1.207 (SCZ, ANCOM-BC2 q = 4.4 × 10⁻⁷) | — | `CROSS_ARM_figures/FigX_source_data.csv` |
@@ -164,4 +164,22 @@ original `stage4_diversity.R` and `diversity_mdd.R`.
 
 | Autism composition tested separately | Astro β = 0.043, P = 0.008; Neuro β = −0.052, P = 0.101 | `02_transcriptomics/asd/` (post-hoc, 45 donors) | `Transcriptomics_ASD/tables/nocomposition/ASD_composition_tested_separately.csv` |
 
-| Autism composition tested separately | Astro β = 0.043, P = 0.008; Neuro β = −0.052, P = 0.101 | `02_transcriptomics/asd/` (post-hoc, 45 donors) | `Transcriptomics_ASD/tables/nocomposition/ASD_composition_tested_separately.csv` |
+---
+
+## A note on file names
+
+Output paths in this table are the names the files carry in the dissertation's
+results directory, not always the names the scripts write. The depression arm's
+tables were copied and renumbered into that directory by a packaging step
+(`build_mdd_v2.sh`, not included here, since it moves files rather than analysing
+them). So `01_PRIMARY_pooled_DE.tsv` is `pooled_2cohort.tsv` as written by
+`mdd_primary_2cohort.R`, `10_robust_leave_one_gene_out.tsv` is
+`robust/leave_one_gene_out.tsv`, and so on. Where this table names a numbered
+file, the script that produced it is the one in the Script column under its own
+output name.
+
+`robust_genera_both_methods.tsv` and `robust_genera_both_methods_v2.tsv` are
+written by `concordance.R` and `concordance_v2.R`, not by the scripts cited in
+the rows that consume them.
+
+No script in this repository writes a manner-of-death table.

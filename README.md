@@ -23,6 +23,17 @@ GABAergic interneuron markers reduced in schizophrenia, immediate-early genes in
 depression, and CHD8-bound promoters displaced in autism. One convergence, in the
 gut, between schizophrenia and depression.
 
+That convergence is three genera — *Faecalibacterium*, *Fusicatenibacter* and
+*Lachnospiraceae* ND3007 group — recurring between the schizophrenia and
+depression concordant sets, 3 of 4 and 26 against a shared tested pool of 116
+(hypergeometric P = 0.035), all three in the same direction. The pool is built by
+intersecting one arm's MaAsLin2-tested genera with the other's ANCOM-BC2-tested
+genera, so it is sensitive to which method's tested set is taken per arm; the
+pool size is recorded alongside the p-value in
+`12_cross_arm_microbiome/cross_arm_overlap.csv` for that reason. The comparable
+autism pairings give no overlap worth testing: 2 of a pool of 119 against
+schizophrenia (P = 0.28) and none at all against depression.
+
 Three analytical controls each converted a nominally significant result into a
 null: resolving deposits to independent donors, estimating rather than assuming
 inter-gene correlation, and comparing gene sets against abundance-matched rather
@@ -221,6 +232,13 @@ plotting code is not in this repository.
 The taxonomy-to-function bridge scripts are per-arm rather than a single
 parameterised script; `bridge_asd.py` records in its header that it replicates the
 schizophrenia logic, and the selection criteria are identical.
+
+No script in this repository produces the corrected SCFA enrichment.
+`RESULTS_MAP.md` cites `scfa_enrichment.csv` and `tested_genus_universe.csv` for
+3 of 5 against 10 of 166, but `cross_arm_microbiome_test.R` writes only
+`cross_arm_overlap.csv` and `shared_genera.csv`, and nothing here builds the
+166-genus universe that replaced the earlier 231. That correction is recorded in
+`RESULTS_MAP.md` but the code behind it is not here.
 
 `GSE41826_run_analysis.R` is a placeholder, not a script. The file contains the
 single line `[paste the entire script contents here]` and nothing else — it is 40
