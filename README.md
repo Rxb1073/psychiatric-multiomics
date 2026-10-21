@@ -47,7 +47,7 @@ than transcriptome-wide comparators.
 | | GSE59288 / GSE51264 | PFC, SFG | SE | 151 runs | 72 humans | 34 / 38 | comparison | −s 0; 40 *M. mulatta* and 39 *P. troglodytes* removed; cases and controls from different series |
 | | GSE211154 | Cerebellum | SE | 39 samples | 39 | 20 / 19 | **excluded** | −s 1; laser-captured Purkinje neurons; 65.6% median unique alignment |
 | Schizophrenia | GSE80655 | DLPFC | poly(A), PE | 57 runs | 48 donors | 24 / 24 | primary (frontal) | −s 0; 9 libraries across two runs each |
-| | GSE78936 | BA11 | poly(A), PE | 52 samples | 40 donors (BA11 28) | 16 / 12 | primary (frontal) | −s 0; 12 donors at BA24 and BA9; BA11 subset never duplicated |
+| | GSE78936 | BA11 | poly(A), PE | 52 samples | 40 donors (BA11 28) | 16 / 12 | primary (frontal) | −s 0; 12 donors at BA24 and BA9; BA11 subset never duplicated; deposited as PRJNA314463; the series spans three regions and includes bipolar donors (Hu *et al.* 2016), who are not analysed here, the likeliest explanation for the trimming array covering 82 runs against 52 samples; the 30-run difference has not been itemised |
 | | GSE138082 | Hippocampus | PE + SE | 78 samples | 26 donors | 13 / 13 | separate region | −s 2; every donor sampled at CA1, CA3 and DG |
 | Depression | GSE101521 | BA9 | rRNA-depleted, PE | 86 runs | 59 donors | 30 / 29 | primary (pooled) | −s 2; two platforms, no donor overlap; 27 microRNA libraries excluded |
 | | GSE102556 | dlPFC BA8/9 | rRNA-depleted, PE | 343 runs | 48 donors | 26 / 22 | primary (pooled) | −s 1; runs collapse to 263 samples, each donor sampled at 4–6 regions; DLPFC subset gives one sample per donor |
@@ -74,10 +74,20 @@ and serves as a depression sensitivity cohort.
 ## Pipeline order
 
 ### Microbiome
+
+Raw FASTQ to feature table, per cohort, in `01_microbiome/upstream/` — download,
+FastQC, primer removal, DADA2, taxonomy, phylogeny. That directory has its own
+README for stage order and the three arms' differing naming conventions, and a
+`PROVENANCE.md` that names which script ran where a stage was attempted more than
+once. The filenames are not a reliable guide to that and `PROVENANCE.md` is.
+
 ```
-qiime_phase1.sh          import, primer removal, DADA2 denoising per cohort
-qiime_phase2.sh          taxonomy (SILVA 138), genus collapse, prevalence filter
-qiime_sepp.sh            fragment insertion into the SILVA 128 reference tree
+download_<accession>.sh  ENA REST API, wget, MD5 verified
+dada2_<accession>.sh     denoise, merge, chimera removal, per cohort
+taxonomy_<accession>.sh  classify against a V4-trimmed SILVA 138 classifier
+qiime_phase1.sh          de novo tree, table summary, alpha rarefaction
+qiime_phase2.sh          genus collapse, prevalence filter
+qiime_phase2_sepp.sh     fragment insertion into the SILVA 128 reference tree
 stage3_mmuphin.R         batch correction, diagnosis retained as covariate
 stage4_diversity.R       alpha and beta diversity, PERMANOVA with PERMDISP
 stage5_diffabund.R       ANCOM-BC2 and MaAsLin2; concordance required
@@ -87,8 +97,20 @@ bridge_*.py              taxonomy-to-function bridge, one per arm
 ```
 
 ### Transcriptomics
+
+Raw FASTQ to count matrix, per deposit, in `02_transcriptomics/upstream/`, with
+its own README and `PROVENANCE.md`. All deposits were aligned against one STAR
+index built from Ensembl GRCh38 release 109, so a difference between deposits is
+not a difference in annotation.
+
 ```
-trim_*.sh, fc_*.sh       trimming, STAR alignment, featureCounts
+build_star_index.sh      GRCh38 release 109, built once and reused
+trimgalore_*.sh          adapter and quality trimming
+trim_array_*.sh          the same as a SLURM job array, where the cohort was large
+star_*.sh                STAR alignment
+featurecounts_*.sh       featureCounts, strandedness set explicitly per deposit
+fc_*.sh                  the same, depression arm naming
+merge_matrices.sh        per-run counts into one matrix per cohort
 asd_child_confoundfree.R autism primary, two confound-free cohorts
 asd_metaanalysis.R       fixed-effect inverse-variance meta-analysis
 asd_setlevel_camera.R    marker-set testing, correlation estimated
@@ -102,9 +124,22 @@ mdd_ieg_final_checks.R   within-cohort permutation null
 
 ### Epigenomics
 ```
-minfi processing, quantile normalisation, limma on M-values
-CHD8 peak calling (MACS2), three-antibody consensus, CHD7 specificity control
-H3K9me2 csaw sliding windows, genome-wide and promoter-restricted
+02_build_references.sh      bowtie2 indices and blacklists, hg19 and hg38
+job1_GSE57369_chipseq.sh    CHD8 ChIP-seq, the series later excluded
+job2_GSE61492_chipseq.sh    CHD8 peak calling (MACS2), three-antibody consensus,
+                            CHD7 specificity control
+job2b_GSE61492_bigwigs.sh   coverage tracks
+job3_GSE215991_chipseq.sh   H3K9me2 alignment and peak calling
+job_csaw_GSE215991.sh       csaw sliding windows, genome-wide (see Known gaps)
+GSE215991_promoter_test.R   the same windows restricted to promoters
+GSE215991_sex_control.R     sex as a negative control
+GSE215991_rizavi_genes.R    the source publication's reported gene set
+job4_GSE131706_methyl.sh    450K array, SVZ
+job5_GSE80017_methyl.sh     450K array, PFC
+job6_GSE74193_methylarray.sh  450K array, schizophrenia
+GSE*_run_analysis.R         minfi processing, quantile normalisation, limma on M-values
+GSE131706_agecontrol.R      age as a covariate
+GSE131706_sexcontrol.R      sex as a negative control
 ```
 
 ### Integration
@@ -136,10 +171,40 @@ Full citations for every tool are in the dissertation's reference list.
 
 ## Environment
 
-`environment/` contains `sessionInfo()` output, the QIIME 2 version, and the
-module load lines used on the HPC. Package versions differ between arms; those
-departures are documented in the dissertation's Supplementary Methods S3 and
-summarised in `environment/departures.md`.
+`environment/` contains `sessionInfo()` output, the QIIME 2 version, the module
+load lines used on the HPC, and `tool_versions.txt` — the exact module version of
+every tool the job scripts loaded, read off the scripts themselves rather than
+recorded by hand, annotated where one stage used a different version from the
+rest.
+
+Package versions differ between arms, and `tool_versions.txt` sets out how. The R
+environment is the least uniform part of the project: three mechanisms were used,
+not one. Most analyses ran against the module stack at R 4.4.1 with Bioconductor
+3.19. The depression microbiome arm ran at R 4.3.1 with a user library ahead of
+the module on the library path, which is why some of its packages resolve to
+Bioconductor 3.20. And the differential-abundance steps ran under conda, outside
+the module stack, because ANCOM-BC2 and MaAsLin2 would not resolve against it.
+
+There are four conda environments across two project directories, not one shared
+environment. The schizophrenia arm's ANCOM-BC2 ran in `microbiome_r`
+(`ancombc2_scz.sh`); the depression arm's ANCOM-BC2, MaAsLin2 and pathway
+differential abundance ran in a separately built `ancombc` environment; the
+autism arm's leave-one-dataset-out check also used `microbiome_r`; and PICRUSt2
+has one environment in each project.
+
+This is a real limitation, and it falls on the result most exposed to it. The
+differential-abundance tests for schizophrenia and depression were run under
+independently built environments whose package versions were never pinned to each
+other, so a version difference between them cannot be ruled out as a contributor
+to a difference between those two arms — and schizophrenia and depression are
+exactly the pair in which this project reports its one gut convergence. The
+concordance requirement between ANCOM-BC2 and MaAsLin2 was applied within each
+arm, not across them, so it does not address this. The convergence should be read
+with that in mind.
+
+`environment/env_setup/` holds the scripts that built the `ancombc` environment
+and installed MMUPHin. The full account is in the dissertation's Supplementary
+Methods S3.
 
 ---
 
@@ -153,6 +218,92 @@ plotting code is not in this repository.
 The taxonomy-to-function bridge scripts are per-arm rather than a single
 parameterised script; `bridge_asd.py` records in its header that it replicates the
 schizophrenia logic, and the selection criteria are identical.
+
+Two things the pipeline depends on are not in this repository. The first is
+GSE74193's subject-resolution and prenatal-removal step, described below, which
+has no script at all. The second is a script referenced by `RESULTS_MAP.md`:
+`chd8_percohort.R`, cited for the per-cohort replication of the CHD8 consensus
+set. Its log survives with the values in it, but the script has not been
+recovered. Its input — the CHD8 peak-to-gene mapping — is produced by
+`chd8_prededup.R`, which is present; the per-cohort step applied to that input is
+not.
+
+The two H3K9me2 window scripts are a sequence, not alternatives, and both are
+required. `csaw_GSE215991.R` does the counting and writes `windows_raw.rds` and
+`bins_10kb.rds`; `csaw_GSE215991_v2.R` reads those two files, does the testing,
+and writes `GSE215991_csaw_v2.RData`, which the promoter-restricted test and both
+controls then load. Run the first, then the second via `job_csaw_v2.sh`.
+
+The two GSE74193 scripts are not interchangeable. They differ in where they get
+their IDATs — `GSE74193_methylation_analysis.R` downloads them from GEO with
+`getGEOSuppFiles`, `GSE74193_run_analysis.R` reads them from a local path — but
+they also fit different models. `GSE74193_methylation_analysis.R` uses
+`~0 + diagnosis + age + sex + period` with period as a factor.
+`GSE74193_run_analysis.R` builds the design incrementally and adds period as
+`as.numeric(period)`, which codes its three levels as 1, 2, 3 and so treats an
+unordered categorical as a linear scale.
+
+`job6_GSE74193_methylarray.sh` calls `run_analysis.R`, so which of the two ran is
+on record — it is the one with period coded numerically.
+
+The gap is elsewhere, and it applies whichever script ran: neither removes the
+prenatal samples, and neither reduces the 675 arrays to one record per subject.
+The 185 / 295 split in the dataset table depends on both steps, so both happened
+outside these scripts — in something not in this repository, or interactively.
+That filtering is the missing piece for this dataset, not the choice of script.
+
+Several wrappers call an R script under a shorter name than the file carries
+here, because the files were given accession prefixes when they were organised
+for this repository. The wrapper is verbatim; the file is present under the
+longer name.
+
+| A wrapper calls | The repository holds |
+|---|---|
+| `agecontrol_ASD.R`, `sexcontrol_ASD.R` | `GSE131706_agecontrol.R`, `GSE131706_sexcontrol.R` |
+| `sexcontrol_MDD.R` | `GSE41826_sexcontrol.R` |
+| `promoter_test.R`, `sex_control.R`, `rizavi_genes.R` | `GSE215991_promoter_test.R`, `GSE215991_sex_control.R`, `GSE215991_rizavi_genes.R` |
+| `run_analysis.R` | `GSE74193_run_analysis.R`, `GSE131706_run_analysis.R`, `GSE80017_run_analysis.R`, `GSE41826_run_analysis.R` — one per dataset, selected by the calling job script's path |
+
+featureCounts was not called identically across the arms. `--primary` is set in
+the five schizophrenia counting scripts — `featurecounts_PRJNA314463`,
+`featurecounts_PRJNA319583`, `featurecounts_PRJNA574470`,
+`featurecounts_array_PRJNA574470` and `fc_heavy5` — and in
+`featurecounts_GSE102741_perBAM`, and is absent everywhere else.
+
+On the best available reading it made no difference to the counts. `-M` is not
+set in any script here, and featureCounts counts multi-mapping reads only when
+`-M` is given, so multi-mapping reads were excluded in every arm regardless of
+`--primary`. The Subread documentation states that `-M` is ignored when
+`--primary` is set, which if taken literally would mean the flag does change
+behaviour; that line is widely reported as a documentation error. The
+inconsistency is recorded because it is visible in the scripts. Whether it has
+any effect has not been measured here, and counting one BAM both ways would
+settle it.
+
+`recover_PRJNA434002_6samples.sh` never ran, and is kept only as a record of an
+attempt. It names six run accessions in the `SRR9262` series, but every library in
+PRJNA434002 is `SRR9292` — as are the accessions named in this cohort's other
+repair scripts, `star_2samples.sh` and `realign_and_fc.sh` — and the `SRR9262`
+series appears nowhere else in the project. It also works in a different project
+directory from the rest of the cohort's scripts. The job left no output: the STAR
+results for this cohort predate it by a month. The cohort's count matrix holds 41
+libraries, matching the deposited total, so nothing is missing from it. The script
+also ends at STAR with `--quantMode GeneCounts` and never calls featureCounts,
+which is consistent with its never having been completed.
+
+Every other stage resolves to a script, with one exception named above: GSE74193's subject resolution and prenatal removal. PRJNA574470's counting looked ambiguous —
+a serial and a job-array version of featureCounts with no way to choose between
+them — until `fc_heavy5.sh` was recovered: the three run in sequence, the array
+version superseding the serial one and `fc_heavy5.sh` counting the five heaviest
+libraries separately before `merge_574470.sh` combines them. The detail is in
+`02_transcriptomics/upstream/PROVENANCE.md`.
+
+The job scripts are kept verbatim, with HPC paths, SLURM resource requests and
+`module load` lines in place. They record what ran; they are not portable, and
+the paths will need changing to run them anywhere else. Where a stage was
+attempted more than once, the two `PROVENANCE.md` files say which attempt stands,
+resolved against modification times rather than filenames — `_final` in a
+filename turned out twice to mean the opposite.
 
 ---
 
