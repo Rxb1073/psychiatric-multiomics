@@ -40,7 +40,7 @@ are not conflated. No result in the report mixes them.
 | ERK module | FDR 0.023 | same | same |
 | Robustness, weakest of four | P = 2.3 × 10⁻² | same | `10_robust_leave_one_gene_out.tsv`, `11_robust_leave_one_donor_out.tsv` |
 | Within-cohort permutation | 5,000 label shuffles | `mdd_ieg_final_checks.R` | logged |
-| Manner-of-death contrasts | six rows, see below | `mdd_filtered_complete.R` | `15_mode_of_death.tsv`, `16_suicide_decomposition.tsv` |
+| Manner-of-death contrasts | six rows, see below | GSE102556 contrasts `mdd_filtered_complete.R`; GSE101521 contrasts `mdd_filtered_rerun.R`, the only CAMERA script using the `group3` column (`deseq_suicide.R` runs the same contrasts at gene level) | `16_suicide_decomposition.tsv` (`suicide/suicide_decomposition.tsv` as written) |
 
 **Manner-of-death subgroup sizes**, verified against
 `sheets/PRJNA398031_SraRunTable.csv` (GSE102556) and the `group3` column of
@@ -70,6 +70,7 @@ second row holds manner of death constant. The 11 non-suicide controls comprise
 | Marker sets, no composition covariates | IEG FDR 0.219, GABAergic 0.179 | `asd_setlevel_camera.R` | `Transcriptomics_ASD/tables/setlevel/ASD_setlevel_summary.csv` |
 | Marker sets, with composition | IEG 0.373, GABAergic 0.382 | same | same |
 | Nominal excess over chance | 1,780 of 17,485 against ~874 | `asd_metaanalysis.R` | logged |
+| Autism composition tested separately | Astro β = 0.043, P = 0.008; Neuro β = −0.052, P = 0.101 | `02_transcriptomics/asd/` (post-hoc, 45 donors) | `Transcriptomics_ASD/tables/nocomposition/ASD_composition_tested_separately.csv` |
 
 ---
 
@@ -162,7 +163,6 @@ diagnosis, so its R² is not directly comparable with schizophrenia's single-coh
 value. Autism and depression Aitchison and Bray–Curtis values come from the
 original `stage4_diversity.R` and `diversity_mdd.R`.
 
-| Autism composition tested separately | Astro β = 0.043, P = 0.008; Neuro β = −0.052, P = 0.101 | `02_transcriptomics/asd/` (post-hoc, 45 donors) | `Transcriptomics_ASD/tables/nocomposition/ASD_composition_tested_separately.csv` |
 
 ---
 
@@ -182,4 +182,5 @@ output name.
 written by `concordance.R` and `concordance_v2.R`, not by the scripts cited in
 the rows that consume them.
 
-No script in this repository writes a manner-of-death table.
+No script in this repository writes a separate manner-of-death table; the six
+contrasts are reported across the two scripts named in that row.

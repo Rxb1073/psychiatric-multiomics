@@ -336,7 +336,7 @@ libraries, matching the deposited total, so nothing is missing from it. The scri
 also ends at STAR with `--quantMode GeneCounts` and never calls featureCounts,
 which is consistent with its never having been completed.
 
-Every other stage resolves to a script, with the two exceptions named above: GSE74193's subject resolution and prenatal removal, and GSE41826's primary analysis. PRJNA574470's counting looked ambiguous —
+Every other stage resolves to a script, with the three exceptions named above: GSE74193's subject resolution and prenatal removal, GSE41826's primary analysis, and the corrected SCFA enrichment. PRJNA574470's counting looked ambiguous —
 a serial and a job-array version of featureCounts with no way to choose between
 them — until `fc_heavy5.sh` was recovered: the three run in sequence, the array
 version superseding the serial one and `fc_heavy5.sh` counting the five heaviest
