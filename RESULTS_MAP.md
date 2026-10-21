@@ -38,7 +38,7 @@ are not conflated. No result in the report mixes them.
 | Donors, primary pool | 167 → 107 | `mdd_primary_2cohort.R` | `Transcriptomics_MDD/tables/01_PRIMARY_pooled_DE.tsv` |
 | Immediate-early module | FDR 0.023 | `mdd_filtered_complete.R` | `Transcriptomics_MDD/tables/` |
 | ERK module | FDR 0.023 | same | same |
-| Robustness, weakest of four | P = 2.3 × 10⁻² | same | `10_robust_leave_one_gene_out.tsv`, `11_robust_leave_one_donor_out.tsv` |
+| Robustness, weakest leave-one-out | P = 9.6 × 10⁻³ (leave-one-donor-out; leave-one-gene-out maximum 5.1 × 10⁻³) | same | `10_robust_leave_one_gene_out.tsv`, `11_robust_leave_one_donor_out.tsv` |
 | Within-cohort permutation | 5,000 label shuffles | `mdd_ieg_final_checks.R` | logged |
 | Manner-of-death contrasts | six rows, see below | three GSE102556 contrasts `mdd_filtered_complete.R`; GSE101521 suicide vs control `mdd_filtered_rerun.R` §6 (`grpMDDs - grpCON`). The other two GSE101521 IEG p-values have no script — see Known gaps | `16_suicide_decomposition.tsv` (`suicide/suicide_decomposition.tsv` as written) holds the GSE102556 rows only |
 
@@ -192,6 +192,11 @@ output name.
 `robust_genera_both_methods.tsv` and `robust_genera_both_methods_v2.tsv` are
 written by `concordance.R` and `concordance_v2.R`, not by the scripts cited in
 the rows that consume them.
+
+This row previously read "weakest of four, P = 2.3 × 10⁻²". That value is not
+produced by either cited file — the largest p-value in them is 9.6 × 10⁻³ — and
+belongs to a different test. The figures above were read directly from the two
+files.
 
 No script in this repository writes a separate manner-of-death table. Of the six
 contrasts, four have a script: the three GSE102556 contrasts in
