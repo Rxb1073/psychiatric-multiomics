@@ -122,7 +122,7 @@ them consistently.
 | SCZ–MDD shared genera | 3 of a pool of 116, P = 0.035, all three same direction | `cross_arm_microbiome_test.R` | `12_cross_arm_microbiome/cross_arm_overlap.csv` |
 | SCFA enrichment, five pairwise-shared | 3 of 5 against 10 of 166, 9.96-fold, P = 0.0015 | same | `12_cross_arm_microbiome/scfa_enrichment.csv` |
 | Tested genus universe | 166 | same | `12_cross_arm_microbiome/tested_genus_universe.csv` |
-| *Turicibacter* | +0.307 (ASD, MaAsLin2 q = 1.6 × 10⁻³); −1.207 (SCZ, ANCOM-BC2 q = 4.4 × 10⁻⁷) | — | `CROSS_ARM_figures/FigX_source_data.csv` |
+| *Turicibacter* | +0.307 (ASD, MaAsLin2 q = 1.6 × 10⁻³); −1.207 (SCZ, ANCOM-BC2 q = 4.4 × 10⁻⁷) | `make_all_figures.R` | `CROSS_ARM_figures/FigX_source_data.csv` |
 | Fermentation pathways, SCZ | CENTFERM q = 0.0042, PWY-6590 q = 0.0042, FERMENTATION q = 0.0433 | `pathway_DA` | `Microbiome_SCZ/tables/pathway_SZ_vs_HC.tsv` |
 | SCFA pathways, ASD and MDD | none significant; closest q = 0.18 and 0.34 | same | `Microbiome_ASD/tables/`, `Microbiome_MDD/tables/` |
 | NSTI | 0.029–0.080 across cohorts | PICRUSt2 | `*/picrust2_out/KO_metagenome_out/weighted_nsti.tsv.gz` |
@@ -164,6 +164,12 @@ Depression models include study as a covariate and report the marginal effect of
 diagnosis, so its R² is not directly comparable with schizophrenia's single-cohort
 value. Autism and depression Aitchison and Bray–Curtis values come from the
 original `stage4_diversity.R` and `diversity_mdd.R`.
+
+`permdisp_mdd.R` also computes PERMANOVA and PERMDISP for the depression arm on
+the same three distances, but fits diagnosis alone (`~ g`) with no study term.
+The values reported above are the study-adjusted ones from
+`mdd_beta_diversity_adonis2.R`. The PERMDISP results agree between the two; the
+PERMANOVA R² and p-values do not, and should not.
 
 
 ---

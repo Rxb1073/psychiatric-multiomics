@@ -234,7 +234,12 @@ recovered. `make_all_figures.R` writes `FigX_crossarm_shared_genera` and its
 source data, along with the schizophrenia alpha, PCoA, concordance and
 effect-size figures and the autism pathway-volcano and taxonomy-bridge figures.
 `permdisp_mdd.R`, recovered alongside it, runs PERMANOVA with PERMDISP on
-unweighted UniFrac, weighted UniFrac and Jaccard for the depression arm.
+unweighted UniFrac, weighted UniFrac and Jaccard for the depression arm — but it
+is the earlier, unadjusted version, fitting diagnosis alone (`~ g`). The
+depression PERMANOVA values reported in `RESULTS_MAP.md` come from
+`mdd_beta_diversity_adonis2.R`, which fits `~ study + disease` marginally. Anyone
+running `permdisp_mdd.R` will get different R² and p-values for PERMANOVA; the
+PERMDISP results should agree, since both test dispersion by diagnosis alone.
 
 The taxonomy-to-function bridge scripts are per-arm rather than a single
 parameterised script; `bridge_asd.py` records in its header that it replicates the
@@ -245,9 +250,10 @@ schizophrenia logic, and the selection criteria are identical.
 genus names; the script here writes eight and never builds that column. The two
 agree on every value — pool 116, overlap 3, P = 0.035, three of three in the same
 direction — and the genus names are given above, so nothing is lost, but the
-published script is not byte-for-byte the one that ran. The version that wrote
-the CSV is no longer on the HPC: no R script in any of the four project
-directories references `cross_arm_overlap`.
+published script is not byte-for-byte the one that ran. The nine-column version
+no longer exists on the HPC — a search of all four project directories found no R
+script that writes it — so the eight-column copy here is the only one that
+survives.
 
 Two of the six manner-of-death IEG p-values have no script. `mdd_filtered_rerun.R`
 computes GSE101521's suicide-against-control contrast and `mdd_filtered_complete.R`
@@ -359,7 +365,7 @@ libraries, matching the deposited total, so nothing is missing from it. The scri
 also ends at STAR with `--quantMode GeneCounts` and never calls featureCounts,
 which is consistent with its never having been completed.
 
-Every other stage resolves to a script, with the four exceptions named above, plus one script that is an earlier version than the one that ran: GSE74193's subject resolution and prenatal removal, GSE41826's primary analysis, the corrected SCFA enrichment, and two of the six manner-of-death set-level p-values. PRJNA574470's counting looked ambiguous —
+Every other stage resolves to a script, with the four exceptions named above: GSE74193's subject resolution and prenatal removal, GSE41826's primary analysis, the corrected SCFA enrichment, and two of the six manner-of-death set-level p-values. Separately, `cross_arm_microbiome_test.R` is an earlier version than the one that ran. PRJNA574470's counting looked ambiguous —
 a serial and a job-array version of featureCounts with no way to choose between
 them — until `fc_heavy5.sh` was recovered: the three run in sequence, the array
 version superseding the serial one and `fc_heavy5.sh` counting the five heaviest
