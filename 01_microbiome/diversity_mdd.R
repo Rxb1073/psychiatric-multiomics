@@ -88,5 +88,10 @@ bd <- betadisper(bc, meta$disease)
 cat("\n===== beta-dispersion (disease) =====\n"); print(anova(bd))
 cat("(If dispersion p<0.05, PERMANOVA differences may be partly dispersion, not location — note it.)\n")
 
+## dispersion check on the Aitchison distance, same construction as line 82
+bd_ait <- betadisper(ait, meta$disease)
+cat("\n===== beta-dispersion, Aitchison (disease) =====\n"); print(anova(bd_ait))
+cat("centroid distances:", round(tapply(bd_ait$distances, bd_ait$group, mean), 2), "\n")
+
 saveRDS(list(alpha=alpha, permB=permB, permA=permA, disp=anova(bd)), "diversity_result.rds")
 cat("\nWROTE: alpha_diversity.tsv, *.png, diversity_result.rds\n")
