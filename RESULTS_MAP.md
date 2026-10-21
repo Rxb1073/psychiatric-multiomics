@@ -122,6 +122,7 @@ them consistently.
 | Concordant genera | ASD 16 taxa (12 named), SCZ 26, MDD 4 | `stage5_diffabund.R`, `ancombc2_scz.R`, `ancombc_mdd_conda.R` | `stage5_concordant_core.csv`, `robust_genera_both_methods_v2.tsv`, `robust_genera_both_methods.tsv` |
 | SCZ–MDD shared genera | 3 of a pool of 116, P = 0.035, all three same direction | `cross_arm_microbiome_test.R` | `12_cross_arm_microbiome/cross_arm_overlap.csv` |
 | SCFA enrichment, five pairwise-shared | 3 of 5 against 10 of 166, 9.96-fold, P = 0.0015 | same | `12_cross_arm_microbiome/scfa_enrichment.csv` |
+| the same against the union of tested genera | 3 of 5 against 10 of 231, 13.86-fold, P = 0.0006 | recomputed, no script | — |
 | Tested genus universe | 166 | same | `12_cross_arm_microbiome/tested_genus_universe.csv` |
 | *Turicibacter* | +0.307 (ASD, MaAsLin2 q = 1.6 × 10⁻³); −1.207 (SCZ, ANCOM-BC2 q = 4.4 × 10⁻⁷) | `make_all_figures.R` | `CROSS_ARM_figures/FigX_source_data.csv` |
 | Fermentation pathways, SCZ | CENTFERM q = 0.0042, PWY-6590 q = 0.0042, FERMENTATION q = 0.0433 | `pathway_DA` | `Microbiome_SCZ/tables/pathway_SZ_vs_HC.tsv` |
@@ -129,12 +130,20 @@ them consistently.
 | NSTI | 0.029–0.080 across cohorts | PICRUSt2 | `*/picrust2_out/KO_metagenome_out/weighted_nsti.tsv.gz` |
 | Species-level resolution | 12.3% of 2,490 ASVs carry a binomial | — | taxonomy tables |
 
-**Correction made during verification.** The SCFA background was originally
-computed against a 231-genus universe that corresponded to no saved file. The
-correct universe is the 166 genera in `tested_genus_universe.csv`. A restricted
-schizophrenia–depression enrichment was also computed but not retained, because
-its pool size depended on which method's tested set was used and no version was
-written to file.
+**Correction made during verification, now itself in question.** The SCFA
+background was first computed against a 231-genus universe, then changed to the
+166 genera in `tested_genus_universe.csv`. Checking both against the arms' tested
+sets reverses which looks right: 231 is exactly the union of the three arms'
+tested genera, so it is the set that "tested in at least one arm" describes,
+while 166 matches no reconstructible rule and contains 13 genera no arm tested.
+The enrichment holds either way and the reported figure is the conservative one —
+3 of 5 producers against 10 of 166 is 9.96-fold (P = 0.0015), against 10 of 231
+it is 13.86-fold (P = 0.0006). Both recomputed here; neither background is
+produced by a script in this repository.
+
+A restricted schizophrenia–depression enrichment was also computed but not
+retained, because its pool size depended on which method's tested set was used
+and no version was written to file.
 
 ---
 

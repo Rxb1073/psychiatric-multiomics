@@ -328,16 +328,28 @@ number 139, and those tested in all three number 90 — the individual arms test
 those sets puts 81 in all three arms, 47 in two, 25 in one, and 13 in none. So
 the background is not "genera tested in at least one arm", which is the set of
 231; what rule produced 166 is not recoverable from the files. The 9.96-fold
-enrichment depends on this background, and the name formats differ between the
-three tables, so part of the mismatch may be name normalisation rather than
-membership.
+enrichment depends on this background — but it survives either choice, and the
+reported figure is the conservative one. Three of the five pairwise-shared genera
+are producers: against 10 producers in 166 that is 9.96-fold (P = 0.0015), and
+against 10 in 231 it is 13.86-fold (P = 0.0006). If the intended background was
+"genera tested in at least one arm", that set is the 231.
+
+The producer counts use the ten-genus list in `make_all_figures.R`
+(*Faecalibacterium*, *Fusicatenibacter*, *Anaerostipes*, *Blautia*,
+*Coprococcus*, *Roseburia*, *Agathobacter*, *Subdoligranulum*, *Butyricicoccus*,
+*Marvinbryantia*). `cross_arm_microbiome_test.R` defines a longer list of
+eighteen for its own annotation; the reported enrichment figures come from the
+ten.
+
+The name formats differ between the three tables, so part of the 166's mismatch
+may be name normalisation rather than membership.
 
 No script in this repository produces the corrected SCFA enrichment.
 `RESULTS_MAP.md` cites `scfa_enrichment.csv` and `tested_genus_universe.csv` for
 3 of 5 against 10 of 166, but `cross_arm_microbiome_test.R` writes only
 `cross_arm_overlap.csv` and `shared_genera.csv`, and nothing here builds the
-166-genus universe that replaced the earlier 231. That correction is recorded in
-`RESULTS_MAP.md` but the code behind it is not here.
+166-genus universe that replaced the earlier 231 — nor the 231 itself. That
+correction is recorded in `RESULTS_MAP.md`, but neither background has code here.
 
 `GSE41826_run_analysis.R` is a placeholder, not a script. The file contains the
 single line `[paste the entire script contents here]` and nothing else — it is 40
