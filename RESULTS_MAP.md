@@ -139,11 +139,13 @@ written to file.
 
 ## Known gaps
 
-The cross-arm microbiome figure and the cross-disorder set-level panel were drawn
-in interactive sessions that were not saved. Their input values are in
-`CROSS_ARM_figures/FigX_source_data.csv` and the CAMERA output tables
-respectively, so the figures are reproducible from saved data, but the plotting
-code is not in this repository.
+The cross-disorder set-level panel was drawn in an interactive session that was
+not saved. Its input values are in the CAMERA output tables, so the figure is
+reproducible from saved data, but the plotting code is not in this repository.
+
+The cross-arm microbiome figure was in the same position until its code was
+recovered: `01_microbiome/make_all_figures.R` writes both the figure and
+`CROSS_ARM_figures/FigX_source_data.csv`.
 
 ---
 
