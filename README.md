@@ -206,15 +206,17 @@ differential abundance ran in a separately built `ancombc` environment; the
 autism arm's leave-one-dataset-out check also used `microbiome_r`; and PICRUSt2
 has one environment in each project.
 
-This is a real limitation, and it falls on the result most exposed to it. The
-differential-abundance tests for schizophrenia and depression were run under
-independently built environments whose package versions were never pinned to each
-other, so a version difference between them cannot be ruled out as a contributor
-to a difference between those two arms — and schizophrenia and depression are
-exactly the pair in which this project reports its one gut convergence. The
-concordance requirement between ANCOM-BC2 and MaAsLin2 was applied within each
-arm, not across them, so it does not address this. The convergence should be read
-with that in mind.
+The two environments were built separately but resolved to the same versions:
+ANCOM-BC2 2.4.0, MaAsLin2 1.16.0 and R 4.3.3 in both, read from the installed
+package metadata rather than from a build specification. MMUPHin 1.16.0 is
+present in `microbiome_r` only, which is consistent with batch correction running
+outside conda in the depression arm. So the schizophrenia and depression
+differential-abundance results — the pair in which this project reports its one
+gut convergence — were produced by the same software versions, and a version
+difference between the arms is not a candidate explanation for the overlap. What
+remains is that the environments were never pinned to each other, so this
+agreement is a fact about how they happened to resolve rather than something the
+build guaranteed.
 
 `environment/env_setup/` holds the scripts that built the `ancombc` environment
 and installed MMUPHin. The full account is in the dissertation's Supplementary
@@ -232,7 +234,8 @@ not from the dissertation.
 
 **Read retrieval.** Most deposits were pulled from the ENA REST API and fetched
 with `wget`, with file sizes and MD5 checksums taken from the same API response
-and verified after download; every microbiome download script works this way.
+and verified after download; every microbiome download script works this way
+except PRJNA880407's full-quality re-download.
 SRA-Toolkit, with `prefetch` and `fasterq-dump`, is used in five scripts:
 `job1_GSE57369_chipseq.sh`, `job2_GSE61492_chipseq.sh` and
 `job3_GSE215991_chipseq.sh` in the epigenomics arm, `01b_redownload_fullq.sh` for
