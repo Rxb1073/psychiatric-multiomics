@@ -9,6 +9,7 @@ RAW DATA RETRIEVAL
   download; no module beyond the site default is needed for that.
   SRA-Toolkit/3.0.10-gompi-2023a    GSE61492, GSE57369 (epigenomics)
   SRA-Toolkit/3.0.10-gompi-2022b    PRJNA880407 re-download at full quality
+  SRA-Toolkit/3.0.3-gompi-2022a     schizophrenia transcriptomics (download_rnaseq.sh)
 
 PYTHON
   Python/3.12.3-GCCcore-13.3.0      count-matrix merge scripts
