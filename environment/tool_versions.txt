@@ -7,7 +7,7 @@ RAW DATA RETRIEVAL
   Most deposits were pulled from the ENA REST API and fetched with wget, with
   file sizes and MD5s taken from the same API response and checked after
   download; no module beyond the site default is needed for that.
-  SRA-Toolkit/3.0.10-gompi-2023a    GSE61492, GSE57369 (epigenomics)
+  SRA-Toolkit/3.0.10-gompi-2023a    GSE61492, GSE57369, GSE215991 (epigenomics)
   SRA-Toolkit/3.0.10-gompi-2022b    PRJNA880407 re-download at full quality
   SRA-Toolkit/3.0.3-gompi-2022a     schizophrenia transcriptomics (download_rnaseq.sh)
 
@@ -84,10 +84,12 @@ CONDA
                  separate project directory
 
   Conda was used because ANCOM-BC2 and MaAsLin2 would not resolve against the
-  Bioconductor module. This is the departure referred to in modules.txt. The
-  consequence is that the autism and depression differential-abundance results
-  were produced under separately built environments whose package versions were
-  not pinned to each other; see the limitation noted in the top-level README.
+  Bioconductor module. This is the departure referred to in modules.txt.
+  microbiome_r and ancombc were built separately and never pinned to each other,
+  but they resolved to the same versions: ANCOM-BC2 2.4.0, MaAsLin2 1.16.0 and
+  R 4.3.3 in both, read from the installed package metadata. MMUPHin 1.16.0 is in
+  microbiome_r only. So the schizophrenia and depression differential-abundance
+  results were produced under the same software versions.
 
 TOOLCHAINS
   bluebear
