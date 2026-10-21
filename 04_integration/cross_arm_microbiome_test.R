@@ -1,8 +1,10 @@
 ## Is the cross-arm microbial overlap specific to butyrate producers?
 ##
 ## The enumerative test asks only whether the SAME genera recur between arms
-## (3 of MDD's 4 concordant genera among SCZ's 26, from a shared pool of 88,
-## hypergeometric p = 0.076). That discards two things the data contain: the
+## (3 of MDD's 4 concordant genera among SCZ's 26, from a shared pool of 116,
+## hypergeometric p = 0.035 -- the figures this script writes to
+## cross_arm_overlap.csv; an earlier draft of this header said 88 and 0.076,
+## from a run that predates the current concordant sets). That discards two things the data contain: the
 ## DIRECTION of each effect, and the functional annotation of each genus.
 ##
 ## This script tests the mechanistic version of the claim instead -- whether
