@@ -224,16 +224,20 @@ Methods S3.
 
 ## Methods as the scripts implement them
 
-Seven points where a written methods description could reasonably differ from
-what the code does. They are set out here so the two can be compared directly
-rather than discovered by inspection. Each was read off the scripts in this
-repository.
+Seven points where a methods description could reasonably differ from what the
+code does. They are set out here so that the dissertation's methods text and
+these scripts can be compared directly, rather than the differences being found
+by inspection. Each statement below was read off the scripts in this repository,
+not from the dissertation.
 
-**Read retrieval.** Deposits were pulled from the ENA REST API and fetched with
-`wget`, with file sizes and MD5 checksums taken from the same API response and
-verified after download. Six of the microbiome download scripts work this way.
-SRA-Toolkit is used in three places only: GSE61492 and GSE57369 in the
-epigenomics arm, and PRJNA880407's full-quality re-download.
+**Read retrieval.** Most deposits were pulled from the ENA REST API and fetched
+with `wget`, with file sizes and MD5 checksums taken from the same API response
+and verified after download; every microbiome download script works this way.
+SRA-Toolkit, with `prefetch` and `fasterq-dump`, is used in five scripts:
+`job1_GSE57369_chipseq.sh`, `job2_GSE61492_chipseq.sh` and
+`job3_GSE215991_chipseq.sh` in the epigenomics arm, `01b_redownload_fullq.sh` for
+PRJNA880407's full-quality re-download, and `download_rnaseq.sh`, the
+schizophrenia transcriptomics driver. Two versions: 3.0.10 and 3.0.3.
 
 **Taxonomic classifier.** The classifier was trained here, not downloaded
 pretrained. `upstream/reference/train_silva.sh` extracts SILVA 138 reads between
@@ -369,9 +373,14 @@ outside these scripts — in something not in this repository, or interactively.
 That filtering is the missing piece for this dataset, not the choice of script.
 
 Neither GSE74193 script adjusts for cell-type composition, and neither restricts
-to autosomal probes. If the analysis reported for this dataset did either, the
-model behind it is not in this repository — which makes the choice between the
-two scripts here moot, since neither is that model.
+to autosomal probes — and the reported analysis did both. Four integration
+scripts (`scz_methylation_axis.R`, `epigenomic_cross_disorder.R`,
+`microbiome_epigenomics_axis.R` and `mb_epi.R`) read
+`DMCpGs_SCZ_postnatal_autosomal_213.csv`, the 213 postnatal autosomal positions
+the downstream analysis is built on, and no script here writes it; both GSE74193
+scripts write `DMCpGs_SCZ_vs_Control.csv` instead. So the model behind the
+reported result is not in this repository, which makes the choice between the two
+scripts here moot — neither of them is it.
 
 GSE131706 and GSE80017 come in the same pair, and split the same way: the
 `_run_analysis.R` of each, called by `job4` and `job5`, builds its design
