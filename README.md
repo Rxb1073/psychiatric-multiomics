@@ -233,6 +233,13 @@ The taxonomy-to-function bridge scripts are per-arm rather than a single
 parameterised script; `bridge_asd.py` records in its header that it replicates the
 schizophrenia logic, and the selection criteria are identical.
 
+Two of the six manner-of-death IEG p-values have no script. `mdd_filtered_rerun.R`
+computes GSE101521's suicide-against-control contrast and `mdd_filtered_complete.R`
+the three GSE102556 contrasts, but nothing here computes the set-level p-values
+for depression-without-suicide against controls, or for suicide against
+non-suicide within depression. `deseq_suicide.R` runs both contrasts gene by gene
+and stops there.
+
 No script in this repository produces the corrected SCFA enrichment.
 `RESULTS_MAP.md` cites `scfa_enrichment.csv` and `tested_genus_universe.csv` for
 3 of 5 against 10 of 166, but `cross_arm_microbiome_test.R` writes only
@@ -336,7 +343,7 @@ libraries, matching the deposited total, so nothing is missing from it. The scri
 also ends at STAR with `--quantMode GeneCounts` and never calls featureCounts,
 which is consistent with its never having been completed.
 
-Every other stage resolves to a script, with the three exceptions named above: GSE74193's subject resolution and prenatal removal, GSE41826's primary analysis, and the corrected SCFA enrichment. PRJNA574470's counting looked ambiguous —
+Every other stage resolves to a script, with the four exceptions named above: GSE74193's subject resolution and prenatal removal, GSE41826's primary analysis, the corrected SCFA enrichment, and two of the six manner-of-death set-level p-values. PRJNA574470's counting looked ambiguous —
 a serial and a job-array version of featureCounts with no way to choose between
 them — until `fc_heavy5.sh` was recovered: the three run in sequence, the array
 version superseding the serial one and `fc_heavy5.sh` counting the five heaviest

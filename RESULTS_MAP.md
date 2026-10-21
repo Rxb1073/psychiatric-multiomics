@@ -40,7 +40,7 @@ are not conflated. No result in the report mixes them.
 | ERK module | FDR 0.023 | same | same |
 | Robustness, weakest of four | P = 2.3 × 10⁻² | same | `10_robust_leave_one_gene_out.tsv`, `11_robust_leave_one_donor_out.tsv` |
 | Within-cohort permutation | 5,000 label shuffles | `mdd_ieg_final_checks.R` | logged |
-| Manner-of-death contrasts | six rows, see below | GSE102556 contrasts `mdd_filtered_complete.R`; GSE101521 contrasts `mdd_filtered_rerun.R`, the only CAMERA script using the `group3` column (`deseq_suicide.R` runs the same contrasts at gene level) | `16_suicide_decomposition.tsv` (`suicide/suicide_decomposition.tsv` as written) |
+| Manner-of-death contrasts | six rows, see below | three GSE102556 contrasts `mdd_filtered_complete.R`; GSE101521 suicide vs control `mdd_filtered_rerun.R` §6 (`grpMDDs - grpCON`). The other two GSE101521 IEG p-values have no script — see Known gaps | `16_suicide_decomposition.tsv` (`suicide/suicide_decomposition.tsv` as written) holds the GSE102556 rows only |
 
 **Manner-of-death subgroup sizes**, verified against
 `sheets/PRJNA398031_SraRunTable.csv` (GSE102556) and the `group3` column of
@@ -182,5 +182,10 @@ output name.
 written by `concordance.R` and `concordance_v2.R`, not by the scripts cited in
 the rows that consume them.
 
-No script in this repository writes a separate manner-of-death table; the six
-contrasts are reported across the two scripts named in that row.
+No script in this repository writes a separate manner-of-death table. Of the six
+contrasts, four have a script: the three GSE102556 contrasts in
+`mdd_filtered_complete.R` and GSE101521's suicide-against-control in
+`mdd_filtered_rerun.R` §6. `deseq_suicide.R` runs all three GSE101521 contrasts
+gene by gene but computes no set-level p-value, so the IEG figures for depression
+without suicide against controls (9 v 29) and for suicide against non-suicide
+within depression (21 v 9) are not produced by anything here.
