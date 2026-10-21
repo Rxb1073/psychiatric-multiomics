@@ -9,10 +9,14 @@ reflect biology rather than the analytical choices of separate published studies
 
 **No primary data are included in this repository.** All deposits are public and
 listed below with their accessions. Sample sheets are excluded because they carry
-donor-level covariates. One summary results table is included —
-`01_microbiome/differential_abundance_both_methods.csv`, genus-level differential
-abundance with no donor-level information — because the concordance requirement
-between ANCOM-BC2 and MaAsLin2 cannot be checked without it.
+donor-level covariates. Two summary results tables are included, both genus-level with no donor-level
+information. `01_microbiome/differential_abundance_both_methods.csv` is there
+because the concordance requirement between ANCOM-BC2 and MaAsLin2 cannot be
+checked without it. `04_integration/cross_arm_overlap.csv` is there because the
+schizophrenia–depression convergence rests on a tested pool of 116 genera that
+cannot be rebuilt from anything else here — the table of shared genera keeps only
+each genus's last name, and the script writes the pool size but not its
+membership.
 
 ---
 
