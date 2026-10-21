@@ -7,9 +7,12 @@ and post-mortem cortical DNA methylation and histone modification — with each
 disorder processed through the same pipeline so that differences between them
 reflect biology rather than the analytical choices of separate published studies.
 
-**No data are included in this repository.** All deposits are public and listed
-below with their accessions. Sample sheets are excluded because they carry
-donor-level covariates.
+**No primary data are included in this repository.** All deposits are public and
+listed below with their accessions. Sample sheets are excluded because they carry
+donor-level covariates. One summary results table is included —
+`01_microbiome/differential_abundance_both_methods.csv`, genus-level differential
+abundance with no donor-level information — because the concordance requirement
+between ANCOM-BC2 and MaAsLin2 cannot be checked without it.
 
 ---
 
@@ -219,7 +222,21 @@ The taxonomy-to-function bridge scripts are per-arm rather than a single
 parameterised script; `bridge_asd.py` records in its header that it replicates the
 schizophrenia logic, and the selection criteria are identical.
 
-Two things the pipeline depends on are not in this repository. The first is
+`GSE41826_run_analysis.R` is a placeholder, not a script. The file contains the
+single line `[paste the entire script contents here]` and nothing else — it is 40
+bytes — and the same is true of the copy it came from. GSE41826 is the depression
+arm's primary methylation analysis, so the script behind that result is not here.
+The dataset's download script and its sex control, `GSE41826_download.sh` and
+`GSE41826_sexcontrol.R`, are present, and the sex control shows the data being
+loaded; the primary analysis itself is not.
+
+It was run interactively. All four HPC project directories were searched for a
+script producing GSE41826's `mVals_betaVals.RData` and none exists, and GSE41826
+is the only one of the four array datasets with no `job*.sh` alongside `job4`,
+`job5` and `job6`. The result stands on the saved objects and the dissertation's
+methods; the code path to it is not recoverable from these directories.
+
+Two further things the pipeline depends on are not in this repository. The first is
 GSE74193's subject-resolution and prenatal-removal step, described below, which
 has no script at all. The second is a script referenced by `RESULTS_MAP.md`:
 `chd8_percohort.R`, cited for the per-cohort replication of the CHD8 consensus
@@ -251,6 +268,15 @@ prenatal samples, and neither reduces the 675 arrays to one record per subject.
 The 185 / 295 split in the dataset table depends on both steps, so both happened
 outside these scripts — in something not in this repository, or interactively.
 That filtering is the missing piece for this dataset, not the choice of script.
+
+GSE131706 and GSE80017 come in the same pair, and split the same way: the
+`_run_analysis.R` of each, called by `job4` and `job5`, builds its design
+incrementally and leaves age out, while the `_methylation_analysis.R` of each
+includes it. For these two the numeric coding is harmless — the variables added
+that way, sex and region or tissue, have two levels each, so numeric and factor
+coding give the same fit. `GSE131706_agecontrol.R` is the check that adds age
+back. Only GSE74193's three-level period is affected by the coding, and only
+GSE74193 has the filtering gap described above.
 
 Several wrappers call an R script under a shorter name than the file carries
 here, because the files were given accession prefixes when they were organised
