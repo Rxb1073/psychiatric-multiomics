@@ -1,0 +1,96 @@
+Module versions loaded by the HPC job scripts in this repository.
+
+Collected from the job scripts themselves rather than recorded by hand, so this
+is what the jobs actually loaded.
+
+RAW DATA RETRIEVAL
+  Most deposits were pulled from the ENA REST API and fetched with wget, with
+  file sizes and MD5s taken from the same API response and checked after
+  download; no module beyond the site default is needed for that.
+  SRA-Toolkit/3.0.10-gompi-2023a    GSE61492, GSE57369 (epigenomics)
+  SRA-Toolkit/3.0.10-gompi-2022b    PRJNA880407 re-download at full quality
+
+PYTHON
+  Python/3.12.3-GCCcore-13.3.0      count-matrix merge scripts
+  SciPy-bundle/2022.05-foss-2022a   confound_check, and the merge scripts' tables
+
+QUALITY CONTROL
+  FastQC/0.11.9-Java-11
+  MultiQC/1.32-foss-2024a
+  SeqKit/2.8.2                      PRJNA880407 orientation check only
+  BBMap/39.19-GCC-13.3.0            loaded only by recover_PRJNA434002_6samples.sh,
+                                    which never ran; no result depends on it
+
+AMPLICON (16S)
+  QIIME2/2024.2                     all cohort processing, taxonomy, diversity, SEPP
+  QIIME2/2025.4                     classifier training only, upstream/reference/train_silva.sh
+
+TRANSCRIPTOMICS
+  Trim_Galore/0.6.10-GCCcore-12.3.0
+  STAR/2.7.11b-GCC-13.3.0
+  Subread/2.0.4-GCC-11.3.0          featureCounts
+  SAMtools/1.21-GCC-13.3.0          PRJNA574470 heavy-library counting (fc_heavy5)
+  SAMtools/1.21-GCC-12.3.0
+  SAMtools/1.16.1-GCC-11.3.0
+  Three SAMtools builds appear. They are different toolchain builds of versions
+  1.16.1 and 1.21, not three different versions of the tool.
+
+EPIGENOMICS
+  Bowtie2/2.5.4-GCC-12.3.0
+  MACS2/2.2.9.1-foss-2022a
+  deepTools/3.5.2-foss-2022a
+  BEDTools/2.31.1-GCC-12.3.0
+  picard/2.25.1-Java-11
+
+R — THREE MECHANISMS, NOT ONE
+  The R environment is the least uniform part of this project. Three different
+  mechanisms were used, and which one applies is visible in each job script's
+  own header rather than inferable from the arm.
+
+  1. Module stack
+     R/4.4.1-gfbf-2023a with R-bundle-Bioconductor/3.19-foss-2023a-R-4.4.1.
+     Most analyses, including all of the transcriptomics and epigenomics.
+
+  2. Module stack with a user library preceding it
+     R/4.3.1-foss-2022b with R_LIBS_USER=$HOME/R/mmuphin_lib.
+     Depression microbiome only: mmuphin_correct, diversity_mdd, and the two
+     env_setup scripts install_mmuphin and fix_ancombc_deps. MMUPHin did NOT
+     run under conda; it ran here. This user library ahead of the module on the
+     library path is why some packages resolve to Bioconductor 3.20 rather than
+     the 3.19 module, as modules.txt notes.
+
+  3. Conda, outside the module stack entirely
+     See below.
+
+CONDA
+  Miniforge3/24.1.2-0
+  Four project-local environments, in two projects. They are not one shared
+  environment, and the autism and depression arms did not use the same one.
+
+  microbiome_r   .../dissertation-autism/Microbiome/conda_envs/microbiome_r
+                 ancombc2_scz, lodo_check
+
+  ancombc        .../neuropsychiatric2/MDD/microbiome/conda_envs/ancombc
+                 ancombc_mdd_conda, maaslin2_mdd, run_pathway_DA
+                 Built by environment/env_setup/make_ancombc_env.sh — that
+                 script builds this environment, not microbiome_r.
+
+  picrust2       .../dissertation-autism/Microbiome/conda_envs/picrust2
+                 picrust2_run (autism, schizophrenia)
+
+  picrust2       .../neuropsychiatric2/MDD/microbiome/conda_envs/picrust2
+                 run_picrust2 (depression) — same name, separate environment,
+                 separate project directory
+
+  Conda was used because ANCOM-BC2 and MaAsLin2 would not resolve against the
+  Bioconductor module. This is the departure referred to in modules.txt. The
+  consequence is that the autism and depression differential-abundance results
+  were produced under separately built environments whose package versions were
+  not pinned to each other; see the limitation noted in the top-level README.
+
+TOOLCHAINS
+  bluebear
+  bear-apps/2022a, 2022b, 2023a, 2024a, and their /live variants
+
+Two QIIME 2 versions and two R versions appear above. Both splits are by stage
+rather than arbitrary, and both are annotated against the version concerned.
