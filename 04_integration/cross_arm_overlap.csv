@@ -1,0 +1,4 @@
+"pair","pool","n_a","n_b","overlap","p_hyper","same_direction","p_binom","genera"
+"MDD vs SCZ",116,4,26,3,0.034768363373041,3,0.25,"Faecalibacterium; Fusicatenibacter; Lachnospiraceae_ND3007_group"
+"ASD vs SCZ",119,5,25,2,0.282027480776063,1,1,"Agathobacter; Turicibacter"
+"ASD vs MDD",122,5,4,0,1,0,NA,""
