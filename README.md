@@ -230,8 +230,9 @@ The dataset's download script and its sex control, `GSE41826_download.sh` and
 `GSE41826_sexcontrol.R`, are present, and the sex control shows the data being
 loaded; the primary analysis itself is not.
 
-It was run interactively. All four HPC project directories were searched for a
-script producing GSE41826's `mVals_betaVals.RData` and none exists, and GSE41826
+It appears to have been run interactively. All four HPC project directories were
+searched for a script producing GSE41826's `mVals_betaVals.RData` and none
+exists, and GSE41826
 is the only one of the four array datasets with no `job*.sh` alongside `job4`,
 `job5` and `job6`. The result stands on the saved objects and the dissertation's
 methods; the code path to it is not recoverable from these directories.
@@ -288,7 +289,7 @@ longer name.
 | `agecontrol_ASD.R`, `sexcontrol_ASD.R` | `GSE131706_agecontrol.R`, `GSE131706_sexcontrol.R` |
 | `sexcontrol_MDD.R` | `GSE41826_sexcontrol.R` |
 | `promoter_test.R`, `sex_control.R`, `rizavi_genes.R` | `GSE215991_promoter_test.R`, `GSE215991_sex_control.R`, `GSE215991_rizavi_genes.R` |
-| `run_analysis.R` | `GSE74193_run_analysis.R`, `GSE131706_run_analysis.R`, `GSE80017_run_analysis.R`, `GSE41826_run_analysis.R` — one per dataset, selected by the calling job script's path |
+| `run_analysis.R` | `GSE74193_run_analysis.R`, `GSE131706_run_analysis.R`, `GSE80017_run_analysis.R` — one per dataset, selected by the calling job script's path. GSE41826 has no job script and its `run_analysis.R` is the placeholder described above. |
 
 featureCounts was not called identically across the arms. `--primary` is set in
 the five schizophrenia counting scripts — `featurecounts_PRJNA314463`,
@@ -317,7 +318,7 @@ libraries, matching the deposited total, so nothing is missing from it. The scri
 also ends at STAR with `--quantMode GeneCounts` and never calls featureCounts,
 which is consistent with its never having been completed.
 
-Every other stage resolves to a script, with one exception named above: GSE74193's subject resolution and prenatal removal. PRJNA574470's counting looked ambiguous —
+Every other stage resolves to a script, with the two exceptions named above: GSE74193's subject resolution and prenatal removal, and GSE41826's primary analysis. PRJNA574470's counting looked ambiguous —
 a serial and a job-array version of featureCounts with no way to choose between
 them — until `fc_heavy5.sh` was recovered: the three run in sequence, the array
 version superseding the serial one and `fc_heavy5.sh` counting the five heaviest
