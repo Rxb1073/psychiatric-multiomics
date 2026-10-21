@@ -168,8 +168,11 @@ original `stage4_diversity.R` and `diversity_mdd.R`.
 `permdisp_mdd.R` also computes PERMANOVA and PERMDISP for the depression arm on
 the same three distances, but fits diagnosis alone (`~ g`) with no study term.
 The values reported above are the study-adjusted ones from
-`mdd_beta_diversity_adonis2.R`. The PERMDISP results agree between the two; the
-PERMANOVA R² and p-values do not, and should not.
+`mdd_beta_diversity_adonis2.R`. The PERMDISP results should agree between the two,
+since both test dispersion by diagnosis alone, but this has not been checked —
+the two scripts read their distance matrices and metadata from different exports
+and may not cover identical sample sets. The PERMANOVA R² and p-values will
+differ, and should.
 
 
 ---
