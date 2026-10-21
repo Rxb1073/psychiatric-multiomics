@@ -222,6 +222,51 @@ Methods S3.
 
 ---
 
+## Methods as the scripts implement them
+
+Seven points where a written methods description could reasonably differ from
+what the code does. They are set out here so the two can be compared directly
+rather than discovered by inspection. Each was read off the scripts in this
+repository.
+
+**Read retrieval.** Deposits were pulled from the ENA REST API and fetched with
+`wget`, with file sizes and MD5 checksums taken from the same API response and
+verified after download. Six of the microbiome download scripts work this way.
+SRA-Toolkit is used in three places only: GSE61492 and GSE57369 in the
+epigenomics arm, and PRJNA880407's full-quality re-download.
+
+**Taxonomic classifier.** The classifier was trained here, not downloaded
+pretrained. `upstream/reference/train_silva.sh` extracts SILVA 138 reads between
+the 515F (`GTGYCAGCMGCCGCGGTAA`) and 806R (`GGACTACNVGGGTWTCTAAT`) primers and
+fits a naive Bayes classifier to that region. It is also the one stage that ran
+under QIIME 2 2025.4 rather than 2024.2.
+
+**When cohorts are merged.** Taxonomy runs per cohort — there is one
+`taxonomy_<accession>.sh` per deposit — and the cohorts are combined afterwards
+at genus level. DADA2 also runs per cohort, because read lengths and primer sets
+differ between deposits. SEPP fragment insertion is the exception: `sepp_pooled.sh`
+runs on the pooled table.
+
+**R versions.** R 4.4.1 with Bioconductor 3.19 for most analyses. R 4.3.1 appears
+in the depression microbiome arm only — `mmuphin_correct.sh`, `diversity_mdd.sh`
+and the two `environment/env_setup` scripts — where it is paired with a user
+library ahead of the module on the library path.
+
+**SAMtools.** Three builds are loaded across the repository: 1.16.1-GCC-11.3.0,
+1.21-GCC-12.3.0 and 1.21-GCC-13.3.0. Two versions, three toolchain builds.
+
+**featureCounts `--primary`.** Set in six scripts: the five schizophrenia
+counting scripts including `fc_heavy5.sh`, and `featurecounts_GSE102741_perBAM.sh`
+in the autism arm — which is the autism counting script whose output stands.
+`-M` is set nowhere, so multi-mapping reads were excluded in every arm regardless.
+The flag's inconsistency has no effect on any count.
+
+**Schizophrenia beta diversity.** `scz_beta_diversity_adonis2.R` uses `adonis2`
+and reports both R² and pseudo-F, and it includes Aitchison distance, computed as
+Euclidean distance on CLR-transformed counts. All three arms use `adonis2`.
+
+---
+
 ## Known gaps
 
 One figure was produced in an interactive session that was not saved: the
@@ -277,6 +322,12 @@ The dataset's download script and its sex control, `GSE41826_download.sh` and
 `GSE41826_sexcontrol.R`, are present, and the sex control shows the data being
 loaded; the primary analysis itself is not.
 
+`GSE41826_download.sh` did not succeed. It fetches `GSE41826_RAW.tar` and exits
+with an error if no IDAT files are extracted, and the IDAT directory on the HPC
+is empty — the series deposited no raw intensity files. GSE41826 was therefore
+analysed from the processed intensity report rather than from IDATs, which also
+explains why it alone among the four array datasets has no `job*.sh`.
+
 It appears to have been run interactively. All four HPC project directories were
 searched for a script producing GSE41826's `mVals_betaVals.RData` and none
 exists, and GSE41826
@@ -316,6 +367,11 @@ prenatal samples, and neither reduces the 675 arrays to one record per subject.
 The 185 / 295 split in the dataset table depends on both steps, so both happened
 outside these scripts — in something not in this repository, or interactively.
 That filtering is the missing piece for this dataset, not the choice of script.
+
+Neither GSE74193 script adjusts for cell-type composition, and neither restricts
+to autosomal probes. If the analysis reported for this dataset did either, the
+model behind it is not in this repository — which makes the choice between the
+two scripts here moot, since neither is that model.
 
 GSE131706 and GSE80017 come in the same pair, and split the same way: the
 `_run_analysis.R` of each, called by `job4` and `job5`, builds its design
