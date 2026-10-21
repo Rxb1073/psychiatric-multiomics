@@ -3,8 +3,12 @@
 ## The enumerative test asks only whether the SAME genera recur between arms
 ## (3 of MDD's 4 concordant genera among SCZ's 26, from a shared pool of 116,
 ## hypergeometric p = 0.035 -- the figures this script writes to
-## cross_arm_overlap.csv; an earlier draft of this header said 88 and 0.076,
-## from a run that predates the current concordant sets). That discards two things the data contain: the
+## cross_arm_overlap.csv. An earlier draft of this header said 88 and 0.076.
+## The pool is the intersection of the two tested tables read below, not of the
+## concordant sets, so that figure came from earlier versions of
+## maaslin2_SZ_vs_HC.tsv and/or ancombc2_MDD_vs_Control.tsv. Which one changed
+## is not recorded; the pool size is written to cross_arm_overlap.csv on every
+## run so the p-value can always be read against the pool that produced it.) That discards two things the data contain: the
 ## DIRECTION of each effect, and the functional annotation of each genus.
 ##
 ## This script tests the mechanistic version of the claim instead -- whether
