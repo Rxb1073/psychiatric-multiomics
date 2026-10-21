@@ -307,12 +307,30 @@ no longer exists on the HPC — a search of all four project directories found n
 script that writes it — so the eight-column copy here is the only one that
 survives.
 
+A nominal-excess ratio over the autism arm's full 21,429-gene tested set has no
+script. `asd_metaanalysis.R` logs that 21,429 genes were tested in both cohorts
+but counts only FDR-adjusted significance; the nominal count that exists,
+1,780 of 17,485 against ~874 expected, is logged by `asd_meta_ORA_combined.R`
+against the smaller Entrez-mapped universe used for over-representation.
+
 Two of the six manner-of-death IEG p-values have no script. `mdd_filtered_rerun.R`
 computes GSE101521's suicide-against-control contrast and `mdd_filtered_complete.R`
 the three GSE102556 contrasts, but nothing here computes the set-level p-values
 for depression-without-suicide against controls, or for suicide against
 non-suicide within depression. `deseq_suicide.R` runs both contrasts gene by gene
 and stops there.
+
+The 166-genus background used by the SCFA enrichment is not reconstructible from
+the arms' tested sets. `tested_genus_universe.csv` holds 166 genus names, but the
+union of the three arms' tested genera is 231, genera tested in at least two arms
+number 139, and those tested in all three number 90 — the individual arms test
+148 (autism), 171 (schizophrenia) and 141 (depression). Matching the 166 against
+those sets puts 81 in all three arms, 47 in two, 25 in one, and 13 in none. So
+the background is not "genera tested in at least one arm", which is the set of
+231; what rule produced 166 is not recoverable from the files. The 9.96-fold
+enrichment depends on this background, and the name formats differ between the
+three tables, so part of the mismatch may be name normalisation rather than
+membership.
 
 No script in this repository produces the corrected SCFA enrichment.
 `RESULTS_MAP.md` cites `scfa_enrichment.csv` and `tested_genus_universe.csv` for

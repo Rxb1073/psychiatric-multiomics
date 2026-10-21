@@ -70,7 +70,7 @@ second row holds manner of death constant. The 11 non-suicide controls comprise
 | Marker sets, no composition covariates | IEG FDR 0.219, GABAergic 0.179 | `asd_setlevel_camera.R` | `Transcriptomics_ASD/tables/setlevel/ASD_setlevel_summary.csv` |
 | Marker sets, with composition | IEG 0.373, GABAergic 0.382 | same | same |
 | Genes tested in both cohorts | 21,429; direction-concordant 12,746 (59.5%); median I² 0.0% | `asd_metaanalysis.R` | logged at runtime |
-| Nominal excess over chance, over-representation universe | 1,780 of 17,485 against ~874 expected (2.04×) | `asd_metaanalysis.R` | logged at runtime |
+| Nominal excess over chance, over-representation universe | 1,780 of 17,485 against ~874 expected (2.04×) | `asd_meta_ORA_combined.R` | logged at runtime |
 | Autism composition tested separately | Astro β = 0.043, P = 0.008; Neuro β = −0.052, P = 0.101 | `02_transcriptomics/asd/` (post-hoc, 45 donors) | `Transcriptomics_ASD/tables/nocomposition/ASD_composition_tested_separately.csv` |
 
 ---
@@ -203,8 +203,13 @@ Two gene universes appear in the autism arm and they are not interchangeable.
 The meta-analysis tests 21,429 genes — those quantified in both cohorts. Of
 those, 17,485 carry an Entrez ID and form the universe for over-representation
 and GSEA. A nominal-excess figure computed against 21,429 will therefore differ
-from the 2.04× above, which is computed against 17,485. Both are logged by
-`asd_metaanalysis.R`; the table states which universe each row uses.
+from the 2.04× above, which is computed against 17,485. The 21,429 figure is logged by `asd_metaanalysis.R`; the 17,485 universe and the
+1,780 nominal genes are logged by `asd_meta_ORA_combined.R`.
+
+No script in this repository counts nominally significant genes against the
+21,429-gene tested set. `asd_metaanalysis.R` counts only FDR-adjusted
+significance (`padj_FE` and `padj_RE`), so a nominal-excess ratio computed over
+21,429 genes is not produced by anything here.
 
 No script in this repository writes a separate manner-of-death table. Of the six
 contrasts, four have a script: the three GSE102556 contrasts in
